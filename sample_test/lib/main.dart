@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sample_test/rabbit.dart';
 import 'package:sample_test/stateful_sample_widget.dart';
@@ -7,10 +9,26 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int value=0; 
+  @override
+  void initState() {
+    value=0; 
+    super.initState();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        value++;
+      });
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,10 +56,13 @@ class MyApp extends StatelessWidget {
       //   title: "구멍이 없는 박스로 실험하는자",
       //   rabbit: Rabbit(name: "비둘기토끼1",state: RabbitState.SLEEP)
       // ),
-      home: StatefulSampleWidget(
-        title: "구멍이 있는 박스로 실험하는 자",
-        rabbit: Rabbit(name: "비둘기토끼2", state: RabbitState.SLEEP),
-      ),
+      home: value> 10 
+        ?Container()
+        : StatefulSampleWidget(
+          title: "구멍이 있는 박스로 실험하는 자",
+          value: value,
+          rabbit: Rabbit(name: "비둘기토끼2", state: RabbitState.SLEEP),
+        ),
     );
   }
 }
